@@ -1,10 +1,8 @@
 import 'dotenv/config';
 import express, { Request, Response } from "express";
 
-
 const app = express();
 const PORT = process.env.PORT;
-
 
 // JSON middleware
 app.use(express.json());
