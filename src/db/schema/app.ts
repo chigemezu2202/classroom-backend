@@ -3,7 +3,7 @@ import { integer, pgTable, timestamp, varchar } from 'drizzle-orm/pg-core';
 
 const timestamps = {
     createdAt: timestamp('created_at').defaultNow().notNull(),
-    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().$onUpdate(() => new Date()).notNull()
 }
 export const departments = pgTable('departments', {
     id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
@@ -26,7 +26,10 @@ export const departmentRelations = relations(departments, ({ many }) => ({
 }));
 
 export const subjectRelations = relations(subjects, ({ one, many }) => ({
-    department: one(departments, { fields: [subjects.departmentId], references: [departments.id] })
+    department: one(departments, {
+        fields: [subjects.departmentId],
+        references: [departments.id]
+    })
 }));
 
 export type Department = typeof departments.$inferSelect;
